@@ -6,7 +6,11 @@ Run lottery.js for test.
 Example : 
 
 
-| Format        | Syntaxe      | Exemple |
-| ------|-----|-----|
-| Italique  	| \*Texte\* 	| *C'est en italique* 	|
+| Format        | Exemple |
+| ------|-----|
+| tickets  	| 129 944 	|
+| win  	| 73 152.05 	|
+| cost  	| 324 860.00 	|
+| final cost  	| -25 1707.95 € 	|
 
+(I haven't won the jackpot yet)
