@@ -1,6 +1,7 @@
-let numLoto = {
+let numLottery = {
     numbers: [],
     stars: [],
+    code: '',
 };
 
 let gains = {
@@ -27,6 +28,7 @@ let gains = {
     1: {
         2: 6.75,
     },
+    code: 1000000.00,
 };
 
 let priceList = {
@@ -64,6 +66,8 @@ let cost = {
     nbNumToPlay: 6,
     // default 2.
     nbStarsToPlay: 2,
+
+    nomCodeWin: 0,
     tickets: 0,
     win: 0.0,
     price: 0.0,
@@ -71,8 +75,8 @@ let cost = {
     final: 0.0,
 }
 
-const loto = () => {
-    numLoto = {
+const lottery = () => {
+    numLottery = {
         numbers: [],
         stars: [],
     };
@@ -80,25 +84,26 @@ const loto = () => {
         let number = 0;
         while (true) {
             number = Math.floor(Math.random() * 49) + 1;
-            if(numLoto.numbers.indexOf(number) === -1) {
+            if(numLottery.numbers.indexOf(number) === -1) {
                 break;
             }
         }
-        numLoto.numbers.push(number);
+        numLottery.numbers.push(number);
     }
-    numLoto.numbers.sort();
+    numLottery.numbers.sort();
     for (let j = 0; j < 2; j++) {
         let number = 0;
         while (true) {
             number = Math.floor(Math.random() * 11) + 1;
-            if(numLoto.stars.indexOf(number) === -1) {
+            if(numLottery.stars.indexOf(number) === -1) {
                 break;
             }
         }
-        numLoto.stars.push(number);
+        numLottery.stars.push(number);
     }
-    numLoto.stars.sort();
-    console.table(numLoto);
+    numLottery.stars.sort();
+    numLottery.code = setOneUniqueCode();
+    console.table(numLottery);
 }
 
 let chess = {
@@ -107,6 +112,17 @@ let chess = {
 };
 
 let maxTestBy10Grilles = 500;
+
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+const setOneUniqueCode = () => {
+    return characters[Math.floor(Math.random() * (characters.length - 1)) + 1] +
+    characters[Math.floor(Math.random() * (characters.length - 1)) + 1] +
+    " " +
+    Math.floor(Math.random() * 999) + 1 +
+    " " +
+    Math.floor(Math.random() * 9909) + 1;
+}
 
 const setNbNumberToPlay = nbNumberToPlay => {
     if (!nbNumberToPlay || !priceList[nbNumberToPlay]) {
@@ -128,6 +144,10 @@ const getTicketCost = () => {
     return priceList[cost.nbNumToPlay][cost.nbStarsToPlay];
 }
 
+const isCodeGood = myCode => {
+    return (numLottery.code === myCode ? true : false);
+}
+
 const choose10Grilles = () => {
     chess = {
         numbers: NewArray(50),
@@ -142,9 +162,12 @@ const choose10Grilles = () => {
             i++;
             cost.price += getTicketCost();
             cost.tickets++;
-            console.log('ticket n°' + cost.tickets + ' : ' + oneGrille.result);
+            console.log('ticket n°' + cost.tickets + ' : ' + oneGrille.result + ', ('+ oneGrille.code+')');
             myGrilles.push(oneGrille);
             cost.win = parseFloat(cost.win) + parseFloat(oneGrille.gains);
+            if (oneGrille.codeWin) {
+                cost.nomCodeWin ++;
+            }
         }
         if (nbTests >= maxTestBy10Grilles) {
             break;
@@ -166,14 +189,16 @@ const testIfAlreadyPlayed = grille => {
 }
 
 const chooseMyNumbers = () => {
-    let myNumLoto = {
+    let myNumLottery = {
         numbers: [],
         stars: [],
         gains: 0.0,
         result: '',
+        code: '',
+        codeWin: false,
     };
     if (chess.numbers.length < 5 || chess.stars.length < 2) {
-        return myNumLoto;
+        return myNumLottery;
     }
     for (let j = 0; j < cost.nbNumToPlay; j++) {
         let number = 0;
@@ -182,7 +207,7 @@ const chooseMyNumbers = () => {
             let index = Math.floor(Math.random() * (chess.numbers.length - 1)) + 1;
             if (chess.numbers[index]) {
                 // si pas trouvé dans la grille en cours de jeu.
-                if (myNumLoto.stars.indexOf(chess.numbers[index]) === -1) {
+                if (myNumLottery.stars.indexOf(chess.numbers[index]) === -1) {
                     number = chess.numbers[index];
 
                     if (chess.numbers.length > 2) {
@@ -195,7 +220,7 @@ const chooseMyNumbers = () => {
                 }
             }
         }
-        myNumLoto.numbers.push(number);
+        myNumLottery.numbers.push(number);
     }
 
     for (let j = 0; j < cost.nbStarsToPlay; j++) {
@@ -206,7 +231,7 @@ const chooseMyNumbers = () => {
             let index = Math.floor(Math.random() * (chess.stars.length - 1)) + 1;
             if (chess.stars[index]) {
                 // si pas trouvé dans la grille en cours de jeu.
-                if (myNumLoto.stars.indexOf(chess.stars[index]) === -1) {
+                if (myNumLottery.stars.indexOf(chess.stars[index]) === -1) {
                     number = chess.stars[index];
                     if (chess.stars.length > 2) {
                         chess.stars.splice(index, 1);
@@ -217,14 +242,16 @@ const chooseMyNumbers = () => {
                 }
             }
         }
-        myNumLoto.stars.push(number);
+        myNumLottery.stars.push(number);
     }
 
-    myNumLoto.numbers.sort();
-    myNumLoto.stars.sort();
-    myNumLoto.gains = whooseMyGains(myNumLoto);
-    myNumLoto.result = myNumLoto.numbers.join(',')  +' ('+ myNumLoto.stars.join(',')+')';
-    return myNumLoto;
+    myNumLottery.code = setOneUniqueCode();
+    myNumLottery.codeWin = isCodeGood(myNumLottery.code);
+    myNumLottery.numbers.sort();
+    myNumLottery.stars.sort();
+    myNumLottery.gains = whooseMyGains(myNumLottery);
+    myNumLottery.result = myNumLottery.numbers.join(',')  +' ('+ myNumLottery.stars.join(',')+')';
+    return myNumLottery;
 }
 
 function NewArray(size) {
@@ -235,20 +262,20 @@ function NewArray(size) {
     return x;
 }
 
-const haveFound = myNumLoto => {
+const haveFound = myNumLottery => {
     let founds = {
         numbers: 0,
         stars: 0,
     };
-    for (const numChoose of myNumLoto.numbers) {
-        for (const num of numLoto.numbers) {
+    for (const numChoose of myNumLottery.numbers) {
+        for (const num of numLottery.numbers) {
             if (numChoose == num) {
                 founds.numbers++;
             }
         }
     }
-    for (const numChoose of myNumLoto.stars) {
-        for (const num of numLoto.stars) {
+    for (const numChoose of myNumLottery.stars) {
+        for (const num of numLottery.stars) {
             if (numChoose == num) {
                 founds.stars++;
             }
@@ -258,27 +285,30 @@ const haveFound = myNumLoto => {
 }
 
 const stats = () => {
-    cost.final = (parseFloat(cost.win) - cost.price).toFixed(2) + ' €';
-    cost.win = cost.win.toFixed(2)+ ' €';
-    cost.price = cost.price.toFixed(2)+ ' €';
+    cost.final = (parseFloat(cost.win) - cost.price).toFixed(2);
+    cost.win = cost.win.toFixed(2);
+    cost.price = cost.price.toFixed(2);
 }
 
-const whooseMyGains = myNumLoto => {
-    let founds = haveFound(myNumLoto);
-    if (!gains[founds.numbers] || !gains[founds.numbers][founds.stars]) {
-        return 0.0;
+const whooseMyGains = myNumLottery => {
+    let somme = 0.0;
+    if (myNumLottery.codeWin) {
+        somme += gains['code'];
     }
-    return gains[founds.numbers][founds.stars];
+
+    let founds = haveFound(myNumLottery);
+    if (!gains[founds.numbers] || !gains[founds.numbers][founds.stars]) {
+        return somme;
+    }
+    somme += gains[founds.numbers][founds.stars];
+    return somme;
 }
 
-loto();
-setNbNumberToPlay(7);
+lottery();
+setNbNumberToPlay(5);
 setNbStarsToPlay(3);
-for (let j = 0; j < 500; j++) {
+for (let j = 0; j < 50; j++) {
     choose10Grilles();
 }
 stats();
 console.table(cost);
-
-
-
