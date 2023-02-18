@@ -7,9 +7,15 @@ Example :
 
 
 │  (index)  │   Values    │
+
 | ------|-----|
+
 │  tickets  │    18000    │
+
 │    win    │ '6930.74 '  │
+
 │   cost    │ '45000.00'  │
+
 │ finalCost │ '-38069.26€'│
+
 
