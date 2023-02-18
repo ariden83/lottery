@@ -73,25 +73,32 @@ let chess = {
     stars: NewArray(12),
 };
 
+let maxTestBy10Grilles = 500;
+
 const choose10Grilles = () => {
     chess = {
         numbers: NewArray(50),
         stars: NewArray(12),
     };
     let i = 0;
+    let nbTests = 0;
     while (true) {
-            let oneGrille = chooseMyNumbers();
-
-            if (!testIfAlreadyPlayed(oneGrille)) {
-                i++;
-                cost.cost += 2.5;
-                cost.tickets++;
-                myGrilles.push(oneGrille);
-                cost.win = parseFloat(cost.win) + parseFloat(oneGrille.gains);
-            }
-            if (i >= 10) {
-                break;
-            }
+        nbTests++;
+        let oneGrille = chooseMyNumbers();
+        if (!testIfAlreadyPlayed(oneGrille)) {
+            i++;
+            cost.cost += 2.5;
+            cost.tickets++;
+            console.log('grille : ' + cost.tickets);
+            myGrilles.push(oneGrille);
+            cost.win = parseFloat(cost.win) + parseFloat(oneGrille.gains);
+        }
+        if (nbTests >= maxTestBy10Grilles) {
+            break;
+        }
+        if (i >= 10) {
+            break;
+        }
     }
     // console.table(myGrilles);
 }
@@ -209,8 +216,8 @@ const haveFound = myNumLoto => {
 }
 
 const stats = () => {
-    cost.finalCost = (parseFloat(cost.win) - cost.cost).toFixed(2);
-    cost.win = cost.win.toFixed(2) + ' €';
+    cost.finalCost = (parseFloat(cost.win) - cost.cost).toFixed(2) + ' €';
+    cost.win = cost.win.toFixed(2);
     cost.cost = cost.cost.toFixed(2) 
 }
 
@@ -223,8 +230,11 @@ const whooseMyGains = myNumLoto => {
 }
 
 loto();
-for (let j = 0; j < 1800; j++) {
+for (let j = 0; j < 13000; j++) {
     choose10Grilles();
 }
 stats();
 console.table(cost);
+
+
+
