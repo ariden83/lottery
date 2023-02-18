@@ -9,7 +9,7 @@ Example :
 | Format        | Exemple |
 | ------|-----|
 | tickets  	| 129 944 	|
-| win  	| 73 152.05 € 	|
-| price  	| 324 860.00 € 	|
-| final  	| -251 707.95 € 	|
+| win  	| 73 152.05  	|
+| price  	| 324 860.00  	|
+| final  	| -251 707.95  	|
 
