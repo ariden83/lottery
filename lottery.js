@@ -46,6 +46,8 @@ let priceList = {
     6: {
         2: 15,
         3: 45,
+        6: 625,
+        7: 315,
         12: 990,
     },
     7: {
@@ -64,8 +66,9 @@ let cost = {
     nbStarsToPlay: 2,
     tickets: 0,
     win: 0.0,
-    cost: 0.0,
-    finalCost: 0.0,
+    price: 0.0,
+    '====================': '====================',
+    final: 0.0,
 }
 
 const loto = () => {
@@ -137,7 +140,7 @@ const choose10Grilles = () => {
         let oneGrille = chooseMyNumbers();
         if (!testIfAlreadyPlayed(oneGrille)) {
             i++;
-            cost.cost += getTicketCost();
+            cost.price += getTicketCost();
             cost.tickets++;
             console.log('ticket n°' + cost.tickets + ' : ' + oneGrille.result);
             myGrilles.push(oneGrille);
@@ -255,9 +258,9 @@ const haveFound = myNumLoto => {
 }
 
 const stats = () => {
-    cost.finalCost = (parseFloat(cost.win) - cost.cost).toFixed(2) + ' €';
+    cost.final = (parseFloat(cost.win) - cost.price).toFixed(2) + ' €';
     cost.win = cost.win.toFixed(2)+ ' €';
-    cost.cost = cost.cost.toFixed(2)+ ' €';
+    cost.price = cost.price.toFixed(2)+ ' €';
 }
 
 const whooseMyGains = myNumLoto => {
@@ -270,9 +273,12 @@ const whooseMyGains = myNumLoto => {
 
 loto();
 setNbNumberToPlay(7);
-setNbStarsToPlay(6);
-for (let j = 0; j < 10000; j++) {
+setNbStarsToPlay(3);
+for (let j = 0; j < 500; j++) {
     choose10Grilles();
 }
 stats();
 console.table(cost);
+
+
+
