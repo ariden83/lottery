@@ -31,11 +31,11 @@ let gains = {
 
 let myGrilles = [];
 
-let couts = {
-    num: 0,
+let cost = {
+    tickets: 0,
     win: 0.0,
-    cout: 0.0,
-    coutFinal: 0.0,
+    cost: 0.0,
+    finalCost: 0.0,
 }
 
 const loto = () => {
@@ -84,10 +84,10 @@ const choose10Grilles = () => {
 
             if (!testIfAlreadyPlayed(oneGrille)) {
                 i++;
-                couts.cout += 2.5;
-                couts.num++;
+                cost.cost += 2.5;
+                cost.tickets++;
                 myGrilles.push(oneGrille);
-                couts.win = parseFloat(couts.win) + parseFloat(oneGrille.gains);
+                cost.win = parseFloat(cost.win) + parseFloat(oneGrille.gains);
             }
             if (i >= 10) {
                 break;
@@ -114,10 +114,10 @@ const choose10GrillesReordered = () => {
     for (let j = 0; j < 10; j++) {
         let oneGrille = chooseMyNumbers();
 
-        couts.cout += 2.5;
-        couts.num ++;
+        cost.cost += 2.5;
+        cost.num ++;
         myGrilles.push(oneGrille);
-        couts.win = parseFloat(couts.win) + parseFloat(oneGrille.gains);
+        cost.win = parseFloat(cost.win) + parseFloat(oneGrille.gains);
     }
     // console.table(myGrilles);
 }
@@ -209,9 +209,9 @@ const haveFound = myNumLoto => {
 }
 
 const stats = () => {
-    couts.coutFinal = (parseFloat(couts.win) - couts.cout).toFixed(2);
-    couts.win = couts.win.toFixed(2) + ' €';
-    couts.cout = couts.cout.toFixed(2) 
+    cost.finalCost = (parseFloat(cost.win) - cost.cost).toFixed(2);
+    cost.win = cost.win.toFixed(2) + ' €';
+    cost.cost = cost.cost.toFixed(2) 
 }
 
 const whooseMyGains = myNumLoto => {
@@ -223,8 +223,8 @@ const whooseMyGains = myNumLoto => {
 }
 
 loto();
-for (let j = 0; j < 1000; j++) {
+for (let j = 0; j < 1800; j++) {
     choose10Grilles();
 }
 stats();
-console.table(couts);
+console.table(cost);
